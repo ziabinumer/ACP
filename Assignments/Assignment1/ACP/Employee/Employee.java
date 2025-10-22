@@ -1,7 +1,10 @@
 package ACP.Employee;
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Employee {
+public class Employee implements Serializable{
+    private static final long serialVersionUID = 1L;
+    
     static int counter = 9000;
     String name;
     String fatherName;
@@ -34,6 +37,7 @@ public class Employee {
         String name, String fatherName, LocalDate dob,
         int scale, String nic, JobCategory jc, Education edu
     ) {
+        this.empID = counter++;
         this.name = name;
         this.fatherName = fatherName;
         this.dob = dob;
@@ -43,7 +47,7 @@ public class Employee {
         this.education = edu;
     }
 
-    // Getter and Setters
+    // Getters and Setters
     public String getName() {
         return name;
     }
@@ -109,6 +113,7 @@ public class Employee {
         this.education = education;
     }
 
+    // functionalities
     public void updateEmployee(Employee newEmp) {
         this.payScale = newEmp.payScale;
         this.education = newEmp.education;
