@@ -5,6 +5,11 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.io.EOFException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.Period;
@@ -293,7 +298,7 @@ public class Client {
             }
 
 
-            if (findEmpIdByNIC(all, newNic) == -1) {
+            if (findEmpIdByNIC(all, newNic) != -1) {
                 JOptionPane.showMessageDialog(null, "NIC already present");
                 return null;
             }
@@ -333,6 +338,7 @@ public class Client {
     private static int findEmpIdByNIC(Employee[] all, String nic) {
         if (EmpCounter == 0) return -1;
         for (Employee emp : all) {
+            if (emp == null) return -1;
             if (emp.getNIC() == nic) {
                 return emp.getEmpID();
             }
@@ -391,8 +397,35 @@ public class Client {
         all[--EmpCounter] = null;
         return true;
     }
+
+    private static void saveToFile(Employee emp) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("employees.dat"))) {
+            out.writeObject(emp);
+            JOptionPane.showMessageDialog(null, "Data saved successfully to employees.dat!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error saving file: ");
+            System.out.println("Error saving file: " + e.getMessage());
+        }
+    }
+
+    private static void loadFromFile(Employee[] employees) {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("employees.dat"))) {
+            int i = 0;
+            while (true) {
+                employees[i++] = (Employee) in.readObject();
+                EmpCounter = i;
+            }
+        } catch (EOFException e) { // file ends (its a normal behavior)
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error loading file: " + e.getMessage());
+        }
+    }
+
+
     public static void main(String[] args) {
         Employee[] employees = new Employee[MAX_EMP];
+
+        loadFromFile(employees);
         
         while (true) {
             int choice = getChoice();
@@ -410,8 +443,13 @@ public class Client {
                         JOptionPane.showMessageDialog(null, "Employee limit exceeded");
                         break;
                     }
-                    employees[EmpCounter++] = getEmployee(null);
-                    System.out.println("added employee with id " + Integer.toString(employees[EmpCounter - 1].getEmpID()));
+                    Employee newEmp = getEmployee(employees, null);
+                    if (newEmp != null) {
+                        saveToFile(employees[EmpCounter - 1]);
+                        loadFromFile(employees);
+                        System.out.println("added employee with id " + Integer.toString(employees[EmpCounter - 1].getEmpID()));
+                    } 
+                    System.out.println("Could not add");
                     break;
                 case 1:
                     String toUpdateId = JOptionPane.showInputDialog("Enter employee id to search: ");
@@ -421,7 +459,7 @@ public class Client {
                         if (emp == null) {
                             JOptionPane.showMessageDialog(null, "Employee not found.");
                         } else {
-                            Employee updated = getEmployee(emp);
+                            Employee updated = getEmployee(employees, emp);
                             if (updated != null) {
                                 employees[findIndexById(employees, id)] = updated;
                                 JOptionPane.showMessageDialog(null, "Updated successfully.");
