@@ -398,9 +398,11 @@ public class Client {
         return true;
     }
 
-    private static void saveToFile(Employee emp) {
+    private static void saveAllToFile(Employee[] all) {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("employees.dat"))) {
-            out.writeObject(emp);
+            for (Employee emp : all) {
+                out.writeObject(emp);
+            }
             JOptionPane.showMessageDialog(null, "Data saved successfully to employees.dat!");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error saving file: ");
@@ -445,11 +447,11 @@ public class Client {
                     }
                     Employee newEmp = getEmployee(employees, null);
                     if (newEmp != null) {
-                        saveToFile(employees[EmpCounter - 1]);
-                        loadFromFile(employees);
+                        employees[EmpCounter++] = newEmp;
+                        saveAllToFile(employees);
                         System.out.println("added employee with id " + Integer.toString(employees[EmpCounter - 1].getEmpID()));
                     } 
-                    System.out.println("Could not add");
+                    else System.out.println("Could not add");
                     break;
                 case 1:
                     String toUpdateId = JOptionPane.showInputDialog("Enter employee id to search: ");
