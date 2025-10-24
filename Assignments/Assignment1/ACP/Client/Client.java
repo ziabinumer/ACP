@@ -423,17 +423,35 @@ public class Client {
         }
     }
 
+    private static Boolean checkValidity(Employee emp) {
+        if (!emp.isAgeValid()) {
+            JOptionPane.showMessageDialog(null, "Age must be minimum 18");
+            return false;
+        }
+        else if (!emp.isProfessionValid()) {
+            JOptionPane.showMessageDialog(null, "Education or PayScale not valid");
+            return false;
+        }
+        return true;
+    }
+
 
     public static void main(String[] args) {
         Employee[] employees = new Employee[MAX_EMP];
 
         loadFromFile(employees);
-        
+        EmpCounter = countLength(employees);
+        int choiceFlag = 0;
+        int choice = 0;
         while (true) {
-            int choice = getChoice();
+            if (choiceFlag != 1) {
+                choice = getChoice();
+            }
+            else choiceFlag = 0;
+            
 
             if (choice == JOptionPane.CLOSED_OPTION) {
-            JOptionPane.showMessageDialog(null, "You didnt select anything. Qutting Program");
+            JOptionPane.showMessageDialog(null, "Qutting Program");
             return;
             }   
         
@@ -446,7 +464,12 @@ public class Client {
                         break;
                     }
                     Employee newEmp = getEmployee(employees, null);
+                    if (!checkValidity(newEmp)) {
+                        choice = 0; choiceFlag = 1;
+                        break;
+                    }
                     if (newEmp != null) {
+                        
                         employees[EmpCounter++] = newEmp;
                         saveAllToFile(employees);
                         System.out.println("added employee with id " + Integer.toString(employees[EmpCounter - 1].getEmpID()));
@@ -462,6 +485,10 @@ public class Client {
                             JOptionPane.showMessageDialog(null, "Employee not found.");
                         } else {
                             Employee updated = getEmployee(employees, emp);
+                            if (!checkValidity(updated)) {
+                                choice = 1; choiceFlag = 1;
+                                break;
+                            }
                             if (updated != null) {
                                 employees[findIndexById(employees, id)] = updated;
                                 JOptionPane.showMessageDialog(null, "Updated successfully.");

@@ -1,6 +1,7 @@
 package ACP.Employee;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.Period;
 
 public class Employee implements Serializable{
     private static final long serialVersionUID = 1L;
@@ -37,6 +38,7 @@ public class Employee implements Serializable{
         String name, String fatherName, LocalDate dob,
         int scale, String nic, JobCategory jc, Education edu
     ) {
+        
         this.empID = counter++;
         this.name = name;
         this.fatherName = fatherName;
@@ -45,7 +47,41 @@ public class Employee implements Serializable{
         this.nic = nic;
         this.jobCategory = jc;
         this.education = edu;
+        
     }
+
+    public boolean isProfessionValid() {
+
+        switch (jobCategory) {
+            case Teacher:
+                if (education.ordinal() < Education.MS.ordinal() || payScale < 18)
+                    return false;
+                break;
+
+            case Officer:
+                if (education.ordinal() < Education.BS.ordinal() || payScale < 17)
+                    return false;
+                break;
+
+            case Staff:
+                if (education.ordinal() < Education.FSC.ordinal() || payScale < 11 || payScale > 16)
+                    return false;
+                break;
+
+            case Labour:
+                if (education.ordinal() < Education.Matric.ordinal() || payScale < 1 || payScale > 10)
+                    return false;
+                break;
+        }
+
+        return true;
+    }
+
+    public boolean isAgeValid() {
+        if (Period.between(dob, LocalDate.now()).getYears() < 18) return false;
+        return true;
+    }
+
 
     // Getters and Setters
     public String getName() {
