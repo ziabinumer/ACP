@@ -253,6 +253,9 @@ public class Client {
         panel.add(new JLabel("<html><b>Personal Information</b></html>"));
         panel.add(new JLabel("")); 
 
+        panel.add(new JLabel("ID:"));
+        panel.add(new JLabel(Integer.toString(emp.getEmpID())));
+
         panel.add(new JLabel("Name:"));
         panel.add(new JLabel(emp.getName()));
 
@@ -497,17 +500,19 @@ public class Client {
                         break;
                     }
                     Employee newEmp = app.getEmployee(null);
+                    
+                    if (newEmp == null) {
+                        break;
+                    }
+                    
                     if (!app.checkValidity(newEmp)) {
                         choice = 0; choiceFlag = 1;
                         break;
                     }
-                    if (newEmp != null) {
-                        
-                        app.employees[app.EmpCounter++] = newEmp;
-                        app.saveAllToFile();
-                        System.out.println("added employee with id " + Integer.toString(app.employees[app.EmpCounter - 1].getEmpID()));
-                    } 
-                    else System.out.println("Could not add");
+                    
+                    app.employees[app.EmpCounter++] = newEmp;
+                    app.saveAllToFile();
+                    System.out.println("added employee with id " + app.employees[app.EmpCounter - 1].getEmpID());
                     break;
                 case 1:
                     String toUpdateId = JOptionPane.showInputDialog("Enter employee id to search: ");
