@@ -1,6 +1,5 @@
 package ACP.Client;
 
-import javax.crypto.spec.PBEKeySpec;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -19,10 +18,12 @@ import ACP.Employee.Employee.JobCategory;
 import ACP.Employee.Employee.Education;
 
 public class Client {
-    final static int MAX_EMP = 50;
-    static int EmpCounter = 0;
+    final int MAX_EMP = 50;
+    int EmpCounter = 0;
 
-    private static int getChoice() {
+    Employee[] employees = new Employee[MAX_EMP];
+
+    private int getChoice() {
         String[] options = {
         "Add New Employee",
         "Update Empployee Info",
@@ -42,7 +43,7 @@ public class Client {
             );
     }
 
-    private static void showSearchDialog(Employee[] employees) {
+    private void showSearchDialog() {
         JTextField idField = new JTextField(5);
         JTextField nameField = new JTextField(25);
         JTextField ageField = new JTextField(3);
@@ -81,7 +82,7 @@ public class Client {
 
             if (!idText.isEmpty()) {
                 try {
-                    Employee emp = findEmpById(employees, Integer.parseInt(idText));
+                    Employee emp = findEmpById(Integer.parseInt(idText));
                     if (emp != null) {
                         showData(emp, "Found employee with id: " + Integer.toString(emp.getEmpID()));
                         return;
@@ -94,37 +95,37 @@ public class Client {
                 return;
             }
             else if (!nameText.isEmpty()) {
-                Employee[] emps = findEmpByName(employees, nameText);
-                int len = countLength(emps);
+                Employee[] emps = findEmpByName(nameText);
+                int len = countLength();
                 if (len == 0) {
                     JOptionPane.showMessageDialog(null, "Found 0 matching employees");
                     return;
                 }
-                showData(emps);
+                showData();
                 return;
             }
             else if (!ageText.isEmpty()) {
                 try {
-                    Employee[] emps = findEmpByAge(employees, Integer.parseInt(ageText));
-                    int len = countLength(emps);
+                    Employee[] emps = findEmpByAge(Integer.parseInt(ageText));
+                    int len = countLength();
                     if (len == 0) {
                         JOptionPane.showMessageDialog(null, "Found 0 matching employees");
                         return;
                     }
-                    showData(emps);
+                    showData();
 
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "Age can only be a number");
                 }
             }
             else if (job != null) {
-                Employee[] emps = findEmpByJobCategory(employees, job);
-                int len = countLength(emps);
+                Employee[] emps = findEmpByJobCategory(job);
+                int len = countLength();
                 if (len == 0) {
                     JOptionPane.showMessageDialog(null, "No employees found in job category: " + job);
                     return;
                 }
-                showData(emps);
+                showData();
                 return;
             } 
             else {
@@ -134,7 +135,7 @@ public class Client {
         }
     }
 
-    private static void showData(Employee emp, String message) {
+    private void showData(Employee emp, String message) {
         if (emp == null) return;
         
         JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
@@ -182,19 +183,19 @@ public class Client {
 
 
     }
-    private static void showData(Employee[] emps) {
-        int len = countLength(emps);
-    if (emps == null || len == 0) {
+    private void showData() {
+        int len = countLength();
+    if (employees == null || len == 0) {
         JOptionPane.showMessageDialog(null, "No matching employees found.");
         return;
     }
 
     for (int i = 0; i < len; i++) {
-        showData(emps[i], "Employee " + (i + 1) + " of " + len);
+        showData(employees[i], "Employee " + (i + 1) + " of " + len);
     }
 }
 
-    private static void addDisable(JTextField main, JTextField... others) {
+    private void addDisable(JTextField main, JTextField... others) {
         main.getDocument().addDocumentListener(new DocumentListener(){
             private void update() {
                 boolean hasValue = !main.getText().trim().isEmpty();
@@ -208,7 +209,7 @@ public class Client {
         });
     }
 
-    private static Employee getEmployee(Employee[] all, Employee em) {
+    private Employee getEmployee(Employee em) {
         String name, fname, nic;
         name = fname = nic = "";
         int pscale = 0;
@@ -298,7 +299,7 @@ public class Client {
             }
 
 
-            if (findEmpIdByNIC(all, newNic) != -1) {
+            if (findEmpIdByNIC(newNic) != -1) {
                 JOptionPane.showMessageDialog(null, "NIC already present");
                 return null;
             }
@@ -317,7 +318,7 @@ public class Client {
         return null;
     }
 
-    private static int countLength(Employee[] employees) {
+    private int countLength() {
         int i;
         for (i = 0; i < MAX_EMP; i++) {
             if (employees[i] == null) break;
@@ -325,9 +326,9 @@ public class Client {
         return i;
     }
 
-    private static Employee findEmpById(Employee[] all, int id) {
+    private Employee findEmpById(int id) {
         if (EmpCounter == 0) return null;
-        for (Employee emp : all) {
+        for (Employee emp : employees) {
             if (emp.getEmpID() == id) {
                 return emp;
             }
@@ -335,9 +336,9 @@ public class Client {
         return null;
     }
 
-    private static int findEmpIdByNIC(Employee[] all, String nic) {
+    private int findEmpIdByNIC(String nic) {
         if (EmpCounter == 0) return -1;
-        for (Employee emp : all) {
+        for (Employee emp : employees) {
             if (emp == null) return -1;
             if (emp.getNIC() == nic) {
                 return emp.getEmpID();
@@ -346,42 +347,42 @@ public class Client {
         return -1;
     }
 
-    private static Employee[] findEmpByName(Employee[] all, String name) {
+    private Employee[] findEmpByName(String name) {
         Employee[] foundEmps = new Employee[MAX_EMP]; int c = 0;
         
         for (int i = 0; i < EmpCounter; i++) {
-            if (all[i].getName().equalsIgnoreCase(name)) {
-                foundEmps[c++] = all[i];
+            if (employees[i].getName().equalsIgnoreCase(name)) {
+                foundEmps[c++] = employees[i];
             }
         }
         return foundEmps;
     }
 
-    private static Employee[] findEmpByAge(Employee[] all, int age) {
+    private Employee[] findEmpByAge(int age) {
         Employee[] foundEmps = new Employee[MAX_EMP]; int c = 0;
         
         for (int i = 0; i < EmpCounter; i++) {
-            if (Period.between(all[i].getDOB(), LocalDate.now()).getYears() == age) {
-                foundEmps[c++] = all[i];
+            if (Period.between(employees[i].getDOB(), LocalDate.now()).getYears() == age) {
+                foundEmps[c++] = employees[i];
             }
         }
         return foundEmps;
     }
 
-    private static Employee[] findEmpByJobCategory(Employee[] all, JobCategory jc) {
+    private Employee[] findEmpByJobCategory(JobCategory jc) {
         Employee[] foundEmps = new Employee[MAX_EMP]; int c = 0;
         
         for (int i = 0; i < EmpCounter; i++) {
-            if (all[i].getJobCategory() == jc) {
-                foundEmps[c++] = all[i];
+            if (employees[i].getJobCategory() == jc) {
+                foundEmps[c++] = employees[i];
             }
         }
         return foundEmps;
     }
 
-    private static int findIndexById(Employee[] all, int id) {
+    private int findIndexById(int id) {
         int index = 0;
-        for (Employee employee : all) {
+        for (Employee employee : employees) {
             if (employee.getEmpID() == id) return index;
             index++;
         }
@@ -389,18 +390,18 @@ public class Client {
     }
 
 
-    private static Boolean deleteEmployee(Employee[] all, int id) {
-        int index = findIndexById(all, id);
+    private Boolean deleteEmployee(int id) {
+        int index = findIndexById(id);
         for (int i = index; i < MAX_EMP - 1; i++) {
-            all[index] = all[index + 1];
+            employees[i] = employees[i + 1];
         }
-        all[--EmpCounter] = null;
+        employees[--EmpCounter] = null;
         return true;
     }
 
-    private static void saveAllToFile(Employee[] all) {
+    private void saveAllToFile() {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("employees.dat"))) {
-            for (Employee emp : all) {
+            for (Employee emp : employees) {
                 out.writeObject(emp);
             }
             JOptionPane.showMessageDialog(null, "Data saved successfully to employees.dat!");
@@ -410,7 +411,7 @@ public class Client {
         }
     }
 
-    private static void loadFromFile(Employee[] employees) {
+    private void loadFromFile() {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("employees.dat"))) {
             int i = 0;
             while (true) {
@@ -423,7 +424,7 @@ public class Client {
         }
     }
 
-    private static Boolean checkValidity(Employee emp) {
+    private Boolean checkValidity(Employee emp) {
         if (!emp.isAgeValid()) {
             JOptionPane.showMessageDialog(null, "Age must be minimum 18");
             return false;
@@ -437,15 +438,19 @@ public class Client {
 
 
     public static void main(String[] args) {
-        Employee[] employees = new Employee[MAX_EMP];
+        // initialize the client class
+        Client app = new Client();
 
-        loadFromFile(employees);
-        EmpCounter = countLength(employees);
+        // load data
+        app.loadFromFile();
+        app.EmpCounter = app.countLength();
+
+        // app interface
         int choiceFlag = 0;
         int choice = 0;
         while (true) {
             if (choiceFlag != 1) {
-                choice = getChoice();
+                choice = app.getChoice();
             }
             else choiceFlag = 0;
             
@@ -459,20 +464,20 @@ public class Client {
             switch(choice) {
             
                 case 0:
-                    if (EmpCounter >= MAX_EMP) {
+                    if (app.EmpCounter >= app.MAX_EMP) {
                         JOptionPane.showMessageDialog(null, "Employee limit exceeded");
                         break;
                     }
-                    Employee newEmp = getEmployee(employees, null);
-                    if (!checkValidity(newEmp)) {
+                    Employee newEmp = app.getEmployee(null);
+                    if (!app.checkValidity(newEmp)) {
                         choice = 0; choiceFlag = 1;
                         break;
                     }
                     if (newEmp != null) {
                         
-                        employees[EmpCounter++] = newEmp;
-                        saveAllToFile(employees);
-                        System.out.println("added employee with id " + Integer.toString(employees[EmpCounter - 1].getEmpID()));
+                        app.employees[app.EmpCounter++] = newEmp;
+                        app.saveAllToFile();
+                        System.out.println("added employee with id " + Integer.toString(app.employees[app.EmpCounter - 1].getEmpID()));
                     } 
                     else System.out.println("Could not add");
                     break;
@@ -480,17 +485,17 @@ public class Client {
                     String toUpdateId = JOptionPane.showInputDialog("Enter employee id to search: ");
                     try {
                         int id = Integer.parseInt(toUpdateId);
-                        Employee emp = findEmpById(employees, id);
+                        Employee emp = app.findEmpById(id);
                         if (emp == null) {
                             JOptionPane.showMessageDialog(null, "Employee not found.");
                         } else {
-                            Employee updated = getEmployee(employees, emp);
-                            if (!checkValidity(updated)) {
+                            Employee updated = app.getEmployee(emp);
+                            if (!app.checkValidity(updated)) {
                                 choice = 1; choiceFlag = 1;
                                 break;
                             }
                             if (updated != null) {
-                                employees[findIndexById(employees, id)] = updated;
+                                app.employees[app.findIndexById(id)] = updated;
                                 JOptionPane.showMessageDialog(null, "Updated successfully.");
                             }
                     }
@@ -502,7 +507,7 @@ public class Client {
                     String toDeleteId = JOptionPane.showInputDialog("Enter employee id to delete: ");
                     try {
                         int id = Integer.parseInt(toDeleteId);
-                        if (deleteEmployee(employees, id)) {
+                        if (app.deleteEmployee(id)) {
                             JOptionPane.showMessageDialog(null, "Deleted employee with id " + id);
                         }
                         else JOptionPane.showMessageDialog(null, "Id was not found");
@@ -511,10 +516,10 @@ public class Client {
                     }
                     break;
                 case 3:
-                    showData(employees);
+                    app.showData();
                     break;
                 case 4:
-                    showSearchDialog(employees);
+                    app.showSearchDialog();
                     break;
                     
             }
