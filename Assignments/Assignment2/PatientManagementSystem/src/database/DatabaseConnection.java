@@ -1,0 +1,24 @@
+package database;
+
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+public class DatabaseConnection {
+    private static final String URL = "jdbc:sqlite:resources/config/hospital.db";
+
+    static {
+        try {
+            Class.forName("org.sqlite.JDBC"); // load driver
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(URL);
+    }
+}
