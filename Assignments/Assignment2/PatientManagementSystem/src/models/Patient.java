@@ -3,8 +3,6 @@ package models;
 import enums.Sex;
 
 public class Patient {
-    public static Integer idCounter = 0;
-
     Integer id;
     String name, fatherName;
     Sex sex; 
@@ -22,8 +20,8 @@ public class Patient {
         this.doctorId = null;
     }
 
-    public Patient(String name, String fatherName, Sex sex, String dateOfBirth, String diseaseHistory, String prescription, Integer doctorId) {
-        this.id = idCounter++;
+    public Patient(Integer id, String name, String fatherName, Sex sex, String dateOfBirth, String diseaseHistory, String prescription, Integer doctorId) {
+        this.id = id;
         this.name = name;
         this.fatherName = fatherName;
         this.sex = sex;

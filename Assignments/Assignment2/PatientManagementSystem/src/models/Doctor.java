@@ -1,7 +1,6 @@
 package models;
 
 public class Doctor {
-    public static int idCounter = 0;
     Integer id;
     String name;
     Integer diseaseId;
@@ -11,8 +10,8 @@ public class Doctor {
         this.name = null;
         this.diseaseId = null;
     }
-    Doctor(String name, Integer did) {
-        this.id = idCounter++;
+    Doctor(Integer id, String name, Integer did) {
+        this.id = id;
         this.name = name;
         this.diseaseId = did;
     }

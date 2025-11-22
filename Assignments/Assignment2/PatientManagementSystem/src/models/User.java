@@ -3,7 +3,6 @@ package models;
 import enums.UserRole;
 
 class User {
-    public static Integer idCounter = 0;
 
     Integer id;
     String username, password;
@@ -15,8 +14,8 @@ User() {
         this.role = null;
     }
 
-    public User(String username, String password, UserRole role) {
-        this.id = idCounter++;
+    public User(Integer id, String username, String password, UserRole role) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.role = role;
