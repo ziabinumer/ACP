@@ -5,13 +5,12 @@ public class Disease {
     String name;
     String description;
 
-    Disease() {
+    public Disease() {
         this.id = null;
         this.name = null;
         this.description = null;
     }
-    Disease(Integer id, String name, String des) {
-        this.id = id;
+    public Disease(String name, String des) {
         this.name = name;
         this.description = des;
     }

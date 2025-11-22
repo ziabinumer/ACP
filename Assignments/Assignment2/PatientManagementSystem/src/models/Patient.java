@@ -20,8 +20,7 @@ public class Patient {
         this.doctorId = null;
     }
 
-    public Patient(Integer id, String name, String fatherName, Sex sex, String dateOfBirth, String diseaseHistory, String prescription, Integer doctorId) {
-        this.id = id;
+    public Patient(String name, String fatherName, Sex sex, String dateOfBirth, String diseaseHistory, String prescription, Integer doctorId) {
         this.name = name;
         this.fatherName = fatherName;
         this.sex = sex;
