@@ -37,7 +37,7 @@ public class DatabaseManager {
                             PATIENT_ID INTEGER PRIMARY KEY AUTOINCREMENT,
                             Patient_Name TEXT NOT NULL,
                             PF_Name TEXT,
-                            Sex TEXT CHECK(Sex IN ('Male', 'Female')),
+                            Sex TEXT CHECK(Sex IN ('MALE', 'FEMALE')),
                             DOB TEXT,
                             Doctor_ID INTEGER, 
                             Disease_History TEXT,
