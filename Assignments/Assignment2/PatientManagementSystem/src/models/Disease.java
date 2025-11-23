@@ -29,6 +29,9 @@ public class Disease {
     }
 
     // setters
+    public void setId(int id) {
+        this.id = id;
+    }
     public void setName(String name) {
         this.name = name;
     }
