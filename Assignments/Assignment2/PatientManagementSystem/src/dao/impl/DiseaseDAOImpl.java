@@ -16,18 +16,20 @@ public class DiseaseDAOImpl implements DiseaseDAO {
     @Override
     public int add(Disease disease) {
         try (Connection conn = DatabaseConnection.getConnection()) {
+            // prepare statement for execution
             String sqlStatement = "INSERT INTO Disease (Disease_Name, Disease_Description) VALUES(?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, disease.getName());
             pstmt.setString(2, disease.getDescription());
 
+            // execute 
             int rowsAffected = pstmt.executeUpdate();
             return rowsAffected;
         } catch (SQLException e) {
 
         }
 
-        return 1;
+        return -1;
     }
 
     @Override
