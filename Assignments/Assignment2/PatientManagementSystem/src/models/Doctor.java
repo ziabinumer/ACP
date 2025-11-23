@@ -5,13 +5,12 @@ public class Doctor {
     String name;
     Integer diseaseId;
 
-    Doctor() {
+    public Doctor() {
         this.id = null;
         this.name = null;
         this.diseaseId = null;
     }
-    Doctor(Integer id, String name, Integer did) {
-        this.id = id;
+    public Doctor(String name, Integer did) {
         this.name = name;
         this.diseaseId = did;
     }

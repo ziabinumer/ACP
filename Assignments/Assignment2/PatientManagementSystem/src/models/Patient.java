@@ -9,7 +9,7 @@ public class Patient {
     String dateOfBirth, diseaseHistory, prescription;
     Integer doctorId;
 
-    Patient() {
+    public Patient() {
         this.id = null;
         this.name = null;
         this.fatherName = null;
