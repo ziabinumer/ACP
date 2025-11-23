@@ -8,7 +8,7 @@ import java.sql.*;
 
 import java.util.List;
 
-class PatientDAOImpl implements PatientDAO{
+public class PatientDAOImpl implements PatientDAO{
     // create
     @Override
     public int add(Patient patient) {
@@ -22,6 +22,7 @@ class PatientDAOImpl implements PatientDAO{
             pstmt.setString(1, patient.getName());
             pstmt.setString(2, patient.getFatherName());
             pstmt.setString(3, patient.getSex().name());
+            System.out.println(patient.getSex().name());
             pstmt.setInt(5, patient.getDoctorId());
             pstmt.setString(6, patient.getDiseaseHistory());
             pstmt.setString(7, patient.getPrescription());

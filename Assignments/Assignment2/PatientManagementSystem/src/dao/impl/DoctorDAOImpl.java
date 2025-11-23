@@ -8,7 +8,7 @@ import database.DatabaseConnection;
 
 import java.util.List;
 
-class DoctorDAOImpl implements DoctorDAO {
+public class DoctorDAOImpl implements DoctorDAO {
 
     @Override
     public int add(Doctor doctor) {
