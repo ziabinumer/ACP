@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.List;
 
 
@@ -26,14 +27,34 @@ public class DiseaseDAOImpl implements DiseaseDAO {
             int rowsAffected = pstmt.executeUpdate();
             return rowsAffected;
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
 
         return -1;
     }
 
     @Override
-    public Disease findById(int id) {return null;}; 
+    public Disease findById(int id) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            // prepare statement for execution
+            String sqlStatement = "SELECT * FROM Disease WHERE Disease_ID = ?";
+            PreparedStatement pstmt = conn.prepareStatement(sqlStatement);
+            pstmt.setInt(1, id);
+
+            // execute 
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()) {
+                String name = rs.getString("Disease_Name");
+                String des = rs.getString("Disease_Description");
+                Disease disease = new Disease(name, des);
+                return disease;
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     @Override
     public Disease findByName(String name) {return null;};
