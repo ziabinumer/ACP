@@ -10,7 +10,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
 import java.util.List;
+import java.util.ArrayList;
 
 
 public class DiseaseDAOImpl implements DiseaseDAO {
@@ -47,6 +49,7 @@ public class DiseaseDAOImpl implements DiseaseDAO {
                 String name = rs.getString("Disease_Name");
                 String des = rs.getString("Disease_Description");
                 Disease disease = new Disease(name, des);
+                disease.setId(rs.getInt("Disease_ID"));
                 return disease;
             }
             
@@ -57,16 +60,93 @@ public class DiseaseDAOImpl implements DiseaseDAO {
     }
 
     @Override
-    public Disease findByName(String name) {return null;};
+    public Disease findByName(String name) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            // prepare statement for execution
+            String sqlStatement = "SELECT * FROM Disease WHERE Disease_Name = ?";
+            PreparedStatement pstmt = conn.prepareStatement(sqlStatement);
+            pstmt.setString(1, name);
+
+            // execute 
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()) {
+                String dName = rs.getString("Disease_Name");
+                String des = rs.getString("Disease_Description");
+                Disease disease = new Disease(dName, des);
+                disease.setId(rs.getInt("Disease_Id"));
+                return disease;
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     @Override
-    public List<Disease> getAll() {return null;};
+    public List<Disease> getAll() {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            // prepare statement for execution
+            String sqlStatement = "SELECT * FROM Disease";
+            PreparedStatement pstmt = conn.prepareStatement(sqlStatement);
+
+            // list to store diseases
+            List<Disease> list = new ArrayList<>();
+            // execute 
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()) {
+                String dName = rs.getString("Disease_Name");
+                String des = rs.getString("Disease_Description");
+                Disease disease = new Disease(dName, des);
+                list.add(disease);
+            }
+            return list;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     // Update
     @Override
-    public boolean update(Disease disease) {return true;};
+    public boolean update(Disease disease) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            // prepare statement for execution
+            String sqlStatement = "Update Disease SET Disease_Name = ?, Disease_Description = ? WHERE Disease_ID = ?";
+            PreparedStatement pstmt = conn.prepareStatement(sqlStatement);
+
+            // set values
+            pstmt.setString(1, disease.getName());
+            pstmt.setString(2, disease.getDescription());
+            pstmt.setInt(3, disease.getId());
+
+            // execute update
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+            
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     // Delete
     @Override
-    public boolean delete(int id) {return true;};
+    public boolean delete(int id) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            // prepare statement for execution
+            String sqlStatement = "delete from disease where Disease_ID = ?";
+            PreparedStatement pstmt = conn.prepareStatement(sqlStatement);
+            pstmt.setInt(1, id);
+
+           int rowsAffected = pstmt.executeUpdate();
+           return rowsAffected > 0;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
