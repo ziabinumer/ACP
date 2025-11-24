@@ -1,6 +1,7 @@
 package dao.impl;
 
 import models.Disease;
+import models.Doctor;
 import dao.interfaces.DiseaseDAO;
 
 import database.DatabaseConnection;
@@ -48,9 +49,9 @@ public class DiseaseDAOImpl implements DiseaseDAO {
             while(rs.next()) {
                 String name = rs.getString("Disease_Name");
                 String des = rs.getString("Disease_Description");
-                Disease disease = new Disease(name, des);
-                disease.setId(rs.getInt("Disease_ID"));
-                return disease;
+                Disease newDisease = new Disease(name, des);
+                newDisease.setId(rs.getInt("Disease_ID"));
+                return newDisease;
             }
             
         } catch (SQLException e) {
@@ -60,12 +61,15 @@ public class DiseaseDAOImpl implements DiseaseDAO {
     }
 
     @Override
-    public Disease findByName(String name) {
+    public List<Disease> findByName(String name) {
         try (Connection conn = DatabaseConnection.getConnection()) {
             // prepare statement for execution
-            String sqlStatement = "SELECT * FROM Disease WHERE Disease_Name = ?";
+            String sqlStatement = "SELECT * FROM Disease WHERE Disease_Name Like ?";
             PreparedStatement pstmt = conn.prepareStatement(sqlStatement);
             pstmt.setString(1, name);
+
+            // list to store diseases
+            List<Disease> list = new ArrayList<>();
 
             // execute 
             ResultSet rs = pstmt.executeQuery();
@@ -74,8 +78,9 @@ public class DiseaseDAOImpl implements DiseaseDAO {
                 String des = rs.getString("Disease_Description");
                 Disease disease = new Disease(dName, des);
                 disease.setId(rs.getInt("Disease_Id"));
-                return disease;
+                list.add(disease);
             }
+            return list;
             
         } catch (SQLException e) {
             e.printStackTrace();

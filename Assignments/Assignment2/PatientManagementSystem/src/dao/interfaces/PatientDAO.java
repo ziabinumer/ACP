@@ -8,7 +8,7 @@ public interface PatientDAO {
 
     // Retrieve
     Patient findById(int id); 
-    Patient findByName(String name);
+    List<Patient> findByName(String name);
     List<Patient> getAll();
 
     List<Patient> findByDisease(String diseaseName);
