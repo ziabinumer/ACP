@@ -1,11 +1,8 @@
 package database;
 
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
 public class DatabaseConnection {
     private static final String URL = "jdbc:sqlite:resources/config/hospital.db";
