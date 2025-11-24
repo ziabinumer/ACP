@@ -40,7 +40,10 @@ User() {
     }
 
     // Setters
-
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public void setUsername(String username) {
         this.username = username;
     }
