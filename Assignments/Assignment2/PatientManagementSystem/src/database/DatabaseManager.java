@@ -7,12 +7,15 @@ import java.sql.SQLException;
 
 import java.io.File;
 
+import logging.AppLogger;
+
 
 public class DatabaseManager {
     public static void start() {
+        AppLogger.info("Attempting connection to db");
         try (Connection conn = DatabaseConnection.getConnection()) {
             if (conn != null) {
-                System.out.println("Connected to db");
+                AppLogger.success("Connected to db");
                 conn.createStatement().execute("PRAGMA foreign_keys = ON");
 
                 Statement sqlStmt = conn.createStatement();
@@ -60,9 +63,11 @@ public class DatabaseManager {
                 sqlStmt.executeUpdate(createPatient);
                 sqlStmt.executeUpdate(createUser);
 
+                AppLogger.success("Database ready for operations");
+
             }
             else {
-                System.out.println("Couldnt estalish connection");
+                AppLogger.error("Couldnt estalish connection");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -74,13 +79,13 @@ public class DatabaseManager {
 
         if (dbFile.exists()) {
             if (dbFile.delete()) {
-                System.out.println("Deleted db file");
+                AppLogger.success("Deleted db file");
             } else {
-                System.out.println("Failed to delete file");
+                AppLogger.error("Failed to delete file");
                 return -1;
             }
         } else {
-            System.out.println("Db file doesnt exist");        
+            AppLogger.error("Db file doesnt exist");        
         }
     
         return 1;
