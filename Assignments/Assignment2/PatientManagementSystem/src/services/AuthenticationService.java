@@ -28,7 +28,7 @@ public class AuthenticationService {
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                User user = new User(rs.getString("Username"), rs.getString("password");
+                User user = new User(rs.getString("Username"), rs.getString("password"),
                                 UserRole.valueOf(rs.getString("role")));
                                 user.setId(rs.getInt("UserID"));
                 return user;
