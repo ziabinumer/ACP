@@ -1,7 +1,6 @@
 package dao.impl;
 
 import models.Disease;
-import models.Doctor;
 import dao.interfaces.DiseaseDAO;
 
 import database.DatabaseConnection;
