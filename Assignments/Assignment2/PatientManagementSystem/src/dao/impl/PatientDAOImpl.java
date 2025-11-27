@@ -108,6 +108,39 @@ public class PatientDAOImpl implements PatientDAO{
         return null;
     }
 
+    @Override
+    public List<Patient> findByAge(int age) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            // prepare statement for execution
+            // Calculate age range: patients who are currently between age and age+1
+            String sqlStatement = "SELECT * FROM Patient WHERE " +
+                "(CAST((julianday('now') - julianday(DOB)) / 365.25 AS INTEGER)) = ?";
+            PreparedStatement pstmt = conn.prepareStatement(sqlStatement);
+            pstmt.setInt(1, age);
+
+            List<Patient> list = new ArrayList<>();
+            // execute 
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Patient patient = new Patient(
+                    rs.getString("Patient_Name"),
+                    rs.getString("PF_Name"),
+                    Sex.valueOf(rs.getString("Sex")),
+                    rs.getString("DOB"),  // String DOB
+                    rs.getString("Disease_History"),
+                    rs.getString("Prescription"),
+                    rs.getInt("Doctor_ID")
+                );
+                patient.setId(rs.getInt("Patient_ID"));
+                list.add(patient);
+            }
+            return list;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     
     @Override
     public List<Patient> getAll() {
