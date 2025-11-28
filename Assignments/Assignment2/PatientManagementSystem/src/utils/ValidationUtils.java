@@ -1,6 +1,8 @@
 package utils;
 
 import logging.AppLogger;
+import models.Disease;
+import models.Doctor;
 import models.Patient;
 
 import logging.AppLogger;
@@ -62,6 +64,48 @@ public class ValidationUtils {
             AppLogger.error("Prescription is too long (max 1000 characters)");
             return -1;
         }
+        return 1;
+    }
+
+    public static int validateDoctor(Doctor doctor) {
+        // Validate doctor name
+        if (doctor.getName() == null || doctor.getName().trim().isEmpty()) {
+            System.out.println("Doctor name cannot be empty");
+            return -1;
+        }
+        
+        if (doctor.getName().length() > 100) {
+            System.out.println("Doctor name is too long (max 100 characters)");
+            return -1;
+        }
+        
+        // Validate disease ID (specialization is basically diseaseId)
+        if (doctor.getdiseaseId() <= 0) {
+            System.out.println("Please select a valid specialization");
+            return -1;
+        }
+        return 1;
+    }
+
+    public static int validateDisease(Disease disease) {
+        // Validate disease name
+        if (disease.getName() == null || disease.getName().trim().isEmpty()) {
+            AppLogger.error("Disease name cannot be empty");
+            return -1;
+        }
+        
+        if (disease.getName().length() > 100) {
+            AppLogger.error("Disease name is too long (max 100 characters)");
+            return -1;
+        }
+        
+        
+        // Validate description
+        if (disease.getDescription() != null && disease.getDescription().length() > 500) {
+            AppLogger.error("Description is too long (max 500 characters)");
+            return -1;
+        }
+
         return 1;
     }
 };
