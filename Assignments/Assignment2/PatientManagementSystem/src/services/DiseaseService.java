@@ -1,8 +1,10 @@
 package services;
 
 import models.Disease;
+import utils.ValidationUtils;
 import dao.interfaces.DiseaseDAO;
 import dao.impl.DiseaseDAOImpl;
+import logging.AppLogger;
 
 import java.util.List;
 
@@ -22,27 +24,12 @@ public class DiseaseService {
             Description can not be too long (500 char limit)
     */
     public int addDisease(Disease disease) {
-        // Validate disease name
-        if (disease.getName() == null || disease.getName().trim().isEmpty()) {
-            System.out.println("Disease name cannot be empty");
-            return -1;
-        }
-        
-        if (disease.getName().length() > 100) {
-            System.out.println("Disease name is too long (max 100 characters)");
-            return -1;
-        }
+        if (ValidationUtils.validateDisease(disease) == -1) return -1;
         
         // Check for duplicate disease name
         Disease existing = diseaseDAO.findByName(disease.getName()).get(0);
         if (existing != null) {
-            System.out.println("Disease with this name already exists");
-            return -1;
-        }
-        
-        // Validate description
-        if (disease.getDescription() != null && disease.getDescription().length() > 500) {
-            System.out.println("Description is too long (max 500 characters)");
+            AppLogger.error("Disease with this name already exists");
             return -1;
         }
         
@@ -55,7 +42,7 @@ public class DiseaseService {
     */
     public Disease getDiseaseById(int id) {
         if (id <= 0) {
-            System.out.println("Invalid disease ID");
+            AppLogger.error("Invalid disease ID");
             return null;
         }
         return diseaseDAO.findById(id);
@@ -74,12 +61,12 @@ public class DiseaseService {
     
     public boolean updateDisease(Disease disease) {
         if (disease.getId() <= 0) {
-            System.out.println("Invalid disease ID");
+            AppLogger.error("Invalid disease ID");
             return false;
         }
         
         if (disease.getName() == null || disease.getName().trim().isEmpty()) {
-            System.out.println("Disease name cannot be empty");
+            AppLogger.error("Disease name cannot be empty");
             return false;
         }
         
@@ -88,7 +75,7 @@ public class DiseaseService {
     
     public boolean deleteDisease(int id) {
         if (id <= 0) {
-            System.out.println("Invalid disease ID");
+            AppLogger.error("Invalid disease ID");
             return false;
         }
         
