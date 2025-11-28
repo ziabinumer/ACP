@@ -53,10 +53,10 @@ public class AuthenticationService {
             return false;
         }
 
-        // to verify pass from db query
+        // to verify password from db query
         String verifyPassSql = "Select * from User where Username = ? and Password = ?";
 
-        // to update pass query
+        // to update password query
         String updatePassSql = "update User set Password = ? where Username = ?";
 
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -71,7 +71,7 @@ public class AuthenticationService {
                 return false;
             }
 
-            // update
+            // update the password
             updateStmt.setString(1, newPass);
             updateStmt.setString(2, username);
 
@@ -82,14 +82,23 @@ public class AuthenticationService {
     }
 
     public void createDefaultUsers() {
+        /*
+            Steps:
+                1. Check Admin Exists
+                If not exists then
+                    create default admin
+                Check Guest Exists
+                If not exists then
+                    create default guest
+        */
         try (Connection conn = DatabaseConnection.getConnection()) {
-            // Check if admin exists
+            // check admin exists
             String checkSql = "SELECT COUNT(*) FROM User WHERE role = 'ADMINISTRATOR'";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(checkSql);
             
             if (rs.next() && rs.getInt(1) == 0) {
-                // Create default admin
+                // create default admin
                 String insertSql = "INSERT INTO User (username, password, role) VALUES (?, ?, ?)";
                 PreparedStatement pstmt = conn.prepareStatement(insertSql);
                 
@@ -101,7 +110,7 @@ public class AuthenticationService {
                 AppLogger.info("Default admin created: username=admin, password=admin123");
             }
             
-            // Check if guest exists
+            // check guest exists
             checkSql = "SELECT COUNT(*) FROM User WHERE role = 'GUEST'";
             rs = stmt.executeQuery(checkSql);
             
