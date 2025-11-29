@@ -7,7 +7,8 @@ public class User {
     Integer id;
     String username, password;
     UserRole role;
-    User() {
+
+    public User() {
         this.id = null;
         this.username = null;
         this.password = null;
@@ -42,7 +43,7 @@ public class User {
     public void setId(int id) {
         this.id = id;
     }
-    
+
     public void setUsername(String username) {
         this.username = username;
     }

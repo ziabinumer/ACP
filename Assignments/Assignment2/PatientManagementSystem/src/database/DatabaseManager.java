@@ -54,7 +54,7 @@ public class DatabaseManager {
                             UserID INTEGER PRIMARY KEY AUTOINCREMENT,
                             Username TEXT NOT NULL UNIQUE,
                             Password TEXT NOT NULL,
-                            Role TEXT CHECK(Role IN ('Administrator', 'Guest')) NOT NULL
+                            Role TEXT CHECK(Role IN ('ADMINISTRATOR', 'GUEST')) NOT NULL
                         )
                         """;
 

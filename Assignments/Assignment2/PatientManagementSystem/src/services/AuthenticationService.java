@@ -107,7 +107,7 @@ public class AuthenticationService {
                 pstmt.setString(3, UserRole.ADMINISTRATOR.name());
                 pstmt.executeUpdate();
                 
-                AppLogger.info("Default admin created: username=admin, password=admin123");
+                AppLogger.info("Default admin created: username=lokamu, password=lokamu123");
             }
             
             // check guest exists
