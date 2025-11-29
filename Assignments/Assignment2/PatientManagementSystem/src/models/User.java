@@ -2,20 +2,19 @@ package models;
 
 import enums.UserRole;
 
-class User {
+public class User {
 
     Integer id;
     String username, password;
     UserRole role;
-User() {
+    User() {
         this.id = null;
         this.username = null;
         this.password = null;
         this.role = null;
     }
 
-    public User(Integer id, String username, String password, UserRole role) {
-        this.id = id;
+    public User(String username, String password, UserRole role) {
         this.username = username;
         this.password = password;
         this.role = role;
