@@ -10,21 +10,42 @@ import java.awt.*;
     initial idea:
         Main Container:
             Top Section
-                Title Bar
                 menu (as applications like vs code has) and toolbar (buttons for methods)
             Content Area
                 will decide what to show here
                 can add forms and dialogs maybe
         
 */
-public abstract class Layout {   
+public abstract class Layout extends JFrame {   
     JPanel mainContainer;
     JPanel contentArea;
-    JFrame frame;
 
-    public Layout() {
-        frame = new JFrame();
-        // will do rest tomorrow. need to study some stuff. man its too big fuck
+    public Layout(String title) {
+        setTitle(title);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // main
+        mainContainer = new JPanel(new BorderLayout());
+        
+        // menu
+        JPanel menu = createMenu();
+        if (menu != null) {
+            mainContainer.add(menu, BorderLayout.NORTH);
+        }
+
+        // content area
+        contentArea = new JPanel(new BorderLayout());
+        mainContainer.add(contentArea, BorderLayout.CENTER);
+
+        //
+        add(mainContainer);
+        
+        initializeContent();
+
     }
+
+    protected abstract JPanel createMenu();
+
+    protected abstract void initializeContent();
 
 }
