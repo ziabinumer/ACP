@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import gui.dialogs.AboutUsDialog;
 import java.awt.*;
+import gui.forms.AddDiseaseForm;
+import gui.forms.AddDoctorForm;
 
 public class AdminMainFrame extends Layout {
     public AdminMainFrame() {
@@ -41,8 +43,8 @@ public class AdminMainFrame extends Layout {
 
         // add listeners
         addPatient.addActionListener(e -> System.out.println("Add Patient clicked"));
-        addDoctor.addActionListener(e -> System.out.println("Add Doctor clicked"));
-        addDisease.addActionListener(e -> System.out.println("Add Disease clicked"));
+        addDoctor.addActionListener(e -> showAddDoctorForm());
+        addDisease.addActionListener(e -> showAddDiseaseForm());
         deletePatient.addActionListener(e -> System.out.println("Delete Patient Record clicked"));
         updateRecord.addActionListener(e -> System.out.println("Update Patient Record clicked"));
 
@@ -147,6 +149,24 @@ public class AdminMainFrame extends Layout {
     private void showAboutDialog() {
         new AboutUsDialog().dialog(this);;
     }
+
+    private void showAddDiseaseForm() {
+        showInContentArea(new AddDiseaseForm());
+    }
+
+    private void showAddDoctorForm() {
+        showInContentArea(new AddDoctorForm());
+    }
+
+    @Override
+    protected void showInContentArea(JPanel panel) {
+        contentArea.removeAll();
+        contentArea.add(panel, BorderLayout.CENTER);
+        contentArea.revalidate();         
+        contentArea.repaint(); 
+    }
+
+
     @Override
     protected void initializeContent() {
         JLabel welcomeLabel = new JLabel("Welcome", SwingConstants.CENTER);
