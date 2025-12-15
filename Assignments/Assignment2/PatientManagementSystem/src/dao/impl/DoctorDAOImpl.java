@@ -93,6 +93,7 @@ public class DoctorDAOImpl implements DoctorDAO {
                      "JOIN Disease dis ON d.Disease_ID = dis.Disease_ID " +
                      "WHERE d.Disease_ID = ?";
             PreparedStatement pstmt = conn.prepareStatement(sqlStatement);
+            pstmt.setInt(1, diseaseId);
 
             // list to store diseases
             List<Doctor> list = new ArrayList<>();
