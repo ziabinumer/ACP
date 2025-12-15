@@ -5,8 +5,6 @@ import javax.swing.table.DefaultTableModel;
 import services.PatientService;
 import services.DoctorService;
 import models.Patient;
-import models.Doctor;
-import enums.Sex;
 
 import java.awt.*;
 import java.util.List;
@@ -20,11 +18,9 @@ public class SearchPanelGuest extends JPanel {
     private DefaultTableModel tableModel;
 
     private PatientService patientService;
-    private DoctorService doctorService;
 
     public SearchPanelGuest(String selected) {
         patientService = new PatientService();
-        doctorService = new DoctorService();
 
         setLayout(new BorderLayout(10, 10));
 
