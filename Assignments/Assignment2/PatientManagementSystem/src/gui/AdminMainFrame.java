@@ -6,6 +6,8 @@ import gui.dialogs.AboutUsDialog;
 import java.awt.*;
 import gui.forms.AddDiseaseForm;
 import gui.forms.AddDoctorForm;
+import gui.forms.AddPatientForm;
+import gui.search.SearchDashPanel;
 
 public class AdminMainFrame extends Layout {
     public AdminMainFrame() {
@@ -16,9 +18,6 @@ public class AdminMainFrame extends Layout {
 
     @Override
     protected JPanel createMenu() {
-        /*
-            Add Patient - Add Doctor
-        */
         JMenuBar menuBar = new JMenuBar();
          
         JMenu manageRecordMenu = new JMenu("Manage Record");
@@ -36,16 +35,16 @@ public class AdminMainFrame extends Layout {
 
         // create items
         JMenuItem addPatient = new JMenuItem("Add Patient");
-        JMenuItem addDoctor = new JMenuItem("Add Patient");
-        JMenuItem addDisease = new JMenuItem("Add Patient");
+        JMenuItem addDoctor = new JMenuItem("Add Doctor");
+        JMenuItem addDisease = new JMenuItem("Add Disease");
         JMenuItem deletePatient = new JMenuItem("Delete Patient Record");
         JMenuItem updateRecord = new JMenuItem("Update Patient Record");
 
         // add listeners
-        addPatient.addActionListener(e -> System.out.println("Add Patient clicked"));
+        addPatient.addActionListener(e -> showAddPatientForm());
         addDoctor.addActionListener(e -> showAddDoctorForm());
         addDisease.addActionListener(e -> showAddDiseaseForm());
-        deletePatient.addActionListener(e -> System.out.println("Delete Patient Record clicked"));
+        deletePatient.addActionListener(e -> showAddPatientForm());
         updateRecord.addActionListener(e -> System.out.println("Update Patient Record clicked"));
 
         manageRecordMenu.add(addPatient);
@@ -71,13 +70,14 @@ public class AdminMainFrame extends Layout {
 
 
         // add listeners
-        searchByName.addActionListener(e -> System.out.println("Search Patient by Name clicked"));
-        searchByID.addActionListener(e -> System.out.println("Search Patient by ID clicked"));
-        searchByAge.addActionListener(e -> System.out.println("Search Patient by Age clicked"));
-        searchByDisease.addActionListener(e -> System.out.println("Search Patient by Disease clicked"));
-        searchByDoctor.addActionListener(e -> System.out.println("Search Patient by Doctor clicked"));
-        searchDoctorByName.addActionListener(e -> System.out.println("Search Doctor by Name clicked"));
-        searchDoctorBySpecialization.addActionListener(e -> System.out.println("Search Doctor by Disease Specialization clicked"));
+        searchByName.addActionListener(e -> showSearchPanel("Patient by Name"));
+        searchByID.addActionListener(e -> showSearchPanel("Patient by ID"));
+        searchByAge.addActionListener(e -> showSearchPanel("Patient by Age"));
+        searchByDisease.addActionListener(e -> showSearchPanel("Patient by Disease"));
+        searchByDoctor.addActionListener(e -> showSearchPanel("Patient by Doctor"));
+        searchDoctorByName.addActionListener(e -> showSearchPanel("Doctor by Name"));
+        searchDoctorBySpecialization.addActionListener(e -> showSearchPanel("Doctor by Disease Specialization"));
+
  
 
         // Add items to the menu
@@ -122,9 +122,9 @@ public class AdminMainFrame extends Layout {
         JButton printBtn = new JButton("Print");
         
         // Add listeners
-        addPatientBtn.addActionListener(e -> System.out.println("Toolbar: Add Patient clicked"));
-        searchBtn.addActionListener(e -> System.out.println("Toolbar: Search clicked"));
-        addDoctorBtn.addActionListener(e -> System.out.println("Toolbar: Add Doctor clicked"));
+        addPatientBtn.addActionListener(e -> showAddPatientForm());
+        searchBtn.addActionListener(e -> showSearchPanel(null));
+        addDoctorBtn.addActionListener(e -> showAddDoctorForm());
         printBtn.addActionListener(e -> System.out.println("Toolbar: Print clicked"));
         
         // Add spacing and buttons to toolbar
@@ -156,6 +156,14 @@ public class AdminMainFrame extends Layout {
 
     private void showAddDoctorForm() {
         showInContentArea(new AddDoctorForm());
+    }
+
+    private void showAddPatientForm() {
+        showInContentArea(new AddPatientForm());
+    }
+
+    private void showSearchPanel(String selection) {
+        showInContentArea(new SearchDashPanel(selection));
     }
 
     @Override
