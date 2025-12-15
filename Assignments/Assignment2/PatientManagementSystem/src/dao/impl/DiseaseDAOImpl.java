@@ -60,15 +60,13 @@ public class DiseaseDAOImpl implements DiseaseDAO {
     }
 
     @Override
-    public List<Disease> findByName(String name) {
+    public Disease findByName(String name) {
         try (Connection conn = DatabaseConnection.getConnection()) {
             // prepare statement for execution
             String sqlStatement = "SELECT * FROM Disease WHERE Disease_Name Like ?";
             PreparedStatement pstmt = conn.prepareStatement(sqlStatement);
             pstmt.setString(1, name);
 
-            // list to store diseases
-            List<Disease> list = new ArrayList<>();
 
             // execute 
             ResultSet rs = pstmt.executeQuery();
@@ -76,10 +74,10 @@ public class DiseaseDAOImpl implements DiseaseDAO {
                 String dName = rs.getString("Disease_Name");
                 String des = rs.getString("Disease_Description");
                 Disease disease = new Disease(dName, des);
-                disease.setId(rs.getInt("Disease_Id"));
-                list.add(disease);
+                disease.setId(rs.getInt("Disease_ID"));
+                return disease;
             }
-            return list;
+            return null;
             
         } catch (SQLException e) {
             e.printStackTrace();
