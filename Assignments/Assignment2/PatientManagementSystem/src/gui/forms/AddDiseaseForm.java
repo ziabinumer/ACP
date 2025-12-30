@@ -9,8 +9,10 @@ public class AddDiseaseForm extends JPanel {
     
     private JTextField nameField;
     private JTextArea descriptionArea;
+    private DiseaseService service;
     
     public AddDiseaseForm() {
+        service = new DiseaseService();
         setLayout(new BorderLayout(10, 10));
         JLabel titleLabel = new JLabel("Add New Disease", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -59,8 +61,8 @@ public class AddDiseaseForm extends JPanel {
         JButton saveBtn = new JButton("Save");
         JButton cancelBtn = new JButton("Cancel");
         
-        saveBtn.addActionListener(e -> System.out.println("Save Disease"));
-        cancelBtn.addActionListener(e -> System.out.println("Cancel"));
+        saveBtn.addActionListener(e -> saveDisease());
+        cancelBtn.addActionListener(e -> clearForm());
         
         buttonPanel.add(saveBtn);
         buttonPanel.add(cancelBtn);
@@ -68,5 +70,37 @@ public class AddDiseaseForm extends JPanel {
         add(buttonPanel, BorderLayout.SOUTH);
     }
     
-    
+    private void saveDisease() {
+        String name = nameField.getText().trim();
+        String description = descriptionArea.getText().trim();
+        
+        if (name.isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "Disease name is required!", 
+                "Validation Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        Disease disease = new Disease(name, description);
+        int id = service.addDisease(disease);
+        
+        if (id > 0) {
+            JOptionPane.showMessageDialog(this, 
+                "Disease added successfully!", 
+                "Success", 
+                JOptionPane.INFORMATION_MESSAGE);
+            clearForm();
+        } else {
+            JOptionPane.showMessageDialog(this, 
+                "Failed to add disease. It may already exist.", 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    private void clearForm() {
+        nameField.setText("");
+        descriptionArea.setText("");
+    }
+
 }
