@@ -9,8 +9,7 @@ import java.awt.*;
 /*
     initial idea:
         Main Container:
-            Top Section
-                menu (as applications like vs code has) and toolbar (buttons for methods)
+            menu (as applications like vs code has) and toolbar (buttons for methods)
             Content Area
                 will decide what to show here
                 can add forms and dialogs maybe
@@ -23,6 +22,8 @@ public abstract class Layout extends JFrame {
     public Layout(String title) {
         setTitle(title);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setIconImage(new ImageIcon("resources/icons/logo.png").getImage());
 
         // main
         mainContainer = new JPanel(new BorderLayout());
@@ -47,5 +48,7 @@ public abstract class Layout extends JFrame {
     protected abstract JPanel createMenu();
 
     protected abstract void initializeContent();
+
+    protected abstract void showInContentArea(JPanel panel);
 
 }
