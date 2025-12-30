@@ -66,7 +66,6 @@ public class PatientService {
         }
         return patientDAO.findByName(name.trim());
     }
-    
     public List<Patient> searchPatientsByAge(int age) {
         if (age < 0 || age > 150) {
             AppLogger.error("Please enter a valid age (0-150)");

@@ -126,7 +126,7 @@ public class PatientDAOImpl implements PatientDAO{
                     rs.getString("Patient_Name"),
                     rs.getString("PF_Name"),
                     Sex.valueOf(rs.getString("Sex")),
-                    rs.getString("DOB"),  // String DOB
+                    rs.getString("DOB"),  
                     rs.getString("Disease_History"),
                     rs.getString("Prescription"),
                     rs.getInt("Doctor_ID")

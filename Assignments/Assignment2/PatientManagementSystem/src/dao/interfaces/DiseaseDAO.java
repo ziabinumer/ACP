@@ -8,7 +8,7 @@ public interface DiseaseDAO {
 
     // Retrieve
     Disease findById(int id); 
-    List<Disease> findByName(String name);
+    Disease findByName(String name);
     List<Disease> getAll();
 
     // Update

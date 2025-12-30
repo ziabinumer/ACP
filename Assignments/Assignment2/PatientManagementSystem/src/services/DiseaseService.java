@@ -27,7 +27,7 @@ public class DiseaseService {
         if (ValidationUtils.validateDisease(disease) == -1) return -1;
         
         // Check for duplicate disease name
-        Disease existing = diseaseDAO.findByName(disease.getName()).get(0);
+        Disease existing = diseaseDAO.findByName(disease.getName());
         if (existing != null) {
             AppLogger.error("Disease with this name already exists");
             return -1;
@@ -52,7 +52,7 @@ public class DiseaseService {
         if (name == null || name.trim().isEmpty()) {
             return null;
         }
-        return diseaseDAO.findByName(name.trim()).get(0);
+        return diseaseDAO.findByName(name.trim());
     }
     
     public List<Disease> getAllDiseases() {

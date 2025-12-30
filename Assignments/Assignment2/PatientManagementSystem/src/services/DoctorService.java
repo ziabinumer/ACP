@@ -43,11 +43,11 @@ public class DoctorService {
         return doctorDAO.findById(id);
     }
     
-    public Doctor getDoctorByName(String name) {
+    public List<Doctor> getDoctorByName(String name) {
         if (name == null || name.trim().isEmpty()) {
             return null;
         }
-        return doctorDAO.findByName(name.trim()).get(0);
+        return doctorDAO.findByName(name.trim());
     }
     
     public List<Doctor> getAllDoctors() {
