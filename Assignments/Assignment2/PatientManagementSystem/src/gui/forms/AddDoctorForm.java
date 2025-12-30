@@ -46,7 +46,7 @@ public class AddDoctorForm extends JPanel {
         gbc.gridy = 1;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0;
-        formPanel.add(new JLabel("Disease:"), gbc);
+        formPanel.add(new JLabel("Specialization:"), gbc);
 
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -74,10 +74,21 @@ public class AddDoctorForm extends JPanel {
     private void populateDiseases() {
         List<Disease> diseases = diseaseService.getAllDiseases();
         diseaseCombo.removeAllItems();
+        
+        if (diseases == null || diseases.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "No diseases found. Please add a disease first.",
+                    "Warning",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
         for (Disease d : diseases) {
             diseaseCombo.addItem(d);
         }
-        // Customize display text for combo box
+        
+        // above shows something like models.address 
+        // to get proper name we need to do this
         diseaseCombo.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value,
@@ -102,9 +113,18 @@ public class AddDoctorForm extends JPanel {
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
+        
         if (selectedDisease == null) {
             JOptionPane.showMessageDialog(this,
-                    "Please select a disease!",
+                    "Please select a specialization! Add a disease first if none exist.",
+                    "Validation Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        if (selectedDisease.getId() == null || selectedDisease.getId() <= 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Invalid disease selected. Please try again.",
                     "Validation Error",
                     JOptionPane.ERROR_MESSAGE);
             return;
@@ -121,7 +141,7 @@ public class AddDoctorForm extends JPanel {
             clearForm();
         } else {
             JOptionPane.showMessageDialog(this,
-                    "Failed to add doctor. It may already exist.",
+                    "Failed to add doctor. Please try again.",
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
