@@ -13,6 +13,7 @@ public class AdminMainFrame extends Layout {
     public AdminMainFrame() {
         super("Patient Management System: Admin");
         setSize(1000, 600);
+        setLocationRelativeTo(null); // Center the window
         setVisible(true);
     }
 
