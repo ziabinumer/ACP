@@ -105,6 +105,7 @@ public class AddDoctorForm extends JPanel {
     private void saveDoctor() {
         String name = nameField.getText().trim();
         Disease selectedDisease = (Disease) diseaseCombo.getSelectedItem();
+        selectedDisease.setId(diseaseService.getDiseaseByName(selectedDisease.getName()).getId());
 
         if (name.isEmpty()) {
             JOptionPane.showMessageDialog(this,
