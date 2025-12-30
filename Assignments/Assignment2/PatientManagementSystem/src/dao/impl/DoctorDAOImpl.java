@@ -16,13 +16,20 @@ public class DoctorDAOImpl implements DoctorDAO {
         try (Connection conn = DatabaseConnection.getConnection()) {
             // prepare statement for execution
             String sqlStatement = "INSERT INTO Doctor (Doctor_Name, Disease_ID) VALUES (?, ?)";
-            PreparedStatement pstmt = conn.prepareStatement(sqlStatement);
+            PreparedStatement pstmt = conn.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, doctor.getName());
             pstmt.setInt(2, doctor.getdiseaseId());
 
             // execute statement
             int rowsAffected = pstmt.executeUpdate();
-            return rowsAffected;
+            
+            if (rowsAffected > 0) {
+                try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        return rs.getInt(1);  // Return generated Doctor_ID
+                    }
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -62,7 +69,7 @@ public class DoctorDAOImpl implements DoctorDAO {
             // prepare statement for execution
             String sqlStatement = "SELECT * FROM Doctor WHERE Doctor_Name Like ?";
             PreparedStatement pstmt = conn.prepareStatement(sqlStatement);
-            pstmt.setString(1, name);
+            pstmt.setString(1, "%" + name + "%");
 
             // list to store diseases
             List<Doctor> list = new ArrayList<>();
@@ -186,4 +193,4 @@ public class DoctorDAOImpl implements DoctorDAO {
         }
         return false;
     }
-};
+}
