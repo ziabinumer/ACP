@@ -6,7 +6,6 @@ import enums.UserRole;
 import logging.AppLogger;
 import services.AuthenticationService;
 import models.User;
-
 public class LoginFrame {
     JFrame frame;
     public LoginFrame() {
@@ -16,6 +15,7 @@ public class LoginFrame {
         frame.setTitle("Patient Management System: Login");
         frame.setSize(400, 350);
         frame.setLocationRelativeTo(null);
+        frame.setIconImage(new ImageIcon("resources/icons/logo.png").getImage());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel outerPanel = new JPanel(new GridBagLayout());
@@ -23,7 +23,7 @@ public class LoginFrame {
         JPanel innerPanel = new JPanel();
         innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
 
-         JLabel titleLabel = new JLabel("Patient Management System");
+        JLabel titleLabel = new JLabel("Patient Management System");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -105,7 +105,7 @@ public class LoginFrame {
             }
             else if (user.getRole() == UserRole.GUEST) {
                 frame.dispose();
-                new GuestMainFrame();
+                new GuestFrame(user.getUsername());
             }
         });
 
