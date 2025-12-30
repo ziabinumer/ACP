@@ -3,8 +3,10 @@ package gui.search;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import services.PatientService;
+import services.DiseaseService;
 import services.DoctorService;
 import models.Patient;
+import models.Disease;
 import models.Doctor;
 import enums.Sex;
 
@@ -21,10 +23,12 @@ public class SearchDashPanel extends JPanel {
 
     private PatientService patientService;
     private DoctorService doctorService;
+    private DiseaseService diseaseService;
 
     public SearchDashPanel(String selected) {
         patientService = new PatientService();
         doctorService = new DoctorService();
+        diseaseService = new DiseaseService();
 
         setLayout(new BorderLayout(10, 10));
 
@@ -116,7 +120,13 @@ public class SearchDashPanel extends JPanel {
                 displayDoctors(doctorService.getDoctorByName(term));
                 break;
             case "Doctor by Disease Specialization":
-                displayDoctors(doctorService.getDoctorsBySpecialization(Integer.parseInt(term)));
+                Disease d1 = diseaseService.getDiseaseByName(term);
+                if (d1 != null) {
+                    displayDoctors(doctorService.getDoctorsBySpecialization(d1.getId()));
+                }
+                else {
+                    displayDoctors(doctorService.getDoctorsBySpecialization(-1));
+                }
                 break;
             default:
                 JOptionPane.showMessageDialog(this, "Unknown search type!", "Error", JOptionPane.ERROR_MESSAGE);
